@@ -1,5 +1,5 @@
 {
-  "name": "~TODO~",
+  "name": "E-receipt",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev --host",
@@ -27,6 +27,8 @@
   },
   "type": "module",
   "dependencies": {
+    "dexie": "^3.0.3",
+    "protobufjs": "^6.11.2",
     "webrtc-adapter": "^8.0.0",
     "workbox-cacheable-response": "^6.1.5",
     "workbox-expiration": "^6.1.5",

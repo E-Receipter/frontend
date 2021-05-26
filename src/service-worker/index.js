@@ -6,6 +6,10 @@ import { precacheAndRoute } from 'workbox-precaching';
 import { build, timestamp } from '$service-worker';
 import { WASM_MODULE_JS,WASM_MODULE } from './settings.js';
 import { importWASM,handleScan } from './wasm.js';
+
+// load WASM Module JS
+importWASM(self.importScripts);
+
 //precache
 precacheAndRoute([
     ...build.map((url) => {
@@ -23,7 +27,7 @@ precacheAndRoute([
         revision: timestamp,
     }
 ]);
-  
+
 // Cache Google Fonts with a stale-while-revalidate strategy, with
 // a maximum number of entries.
 registerRoute(
@@ -60,9 +64,7 @@ registerRoute(
   );
 
 registerRoute(
-    new RegExp('/upload'),
+    ({ url })=>{return url.pathname === '/upload'},
     handleScan,
+    'POST',
 )
-
-// load WASM Module JS
-importWASM(self.importScripts);

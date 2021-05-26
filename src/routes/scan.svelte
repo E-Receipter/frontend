@@ -48,20 +48,55 @@ onMount(async ()=>{
 })
 
 async function takePicture(){
-    videoOrCanvas=!videoOrCanvas;
+    videoOrCanvas=false;
     var ctx = canvas.getContext('2d');
     canvas.width = video.clientWidth;
     canvas.height = video.clientHeight;
     ctx.drawImage(
         video,0,0,canvas.width,canvas.height,
     );
-    decodeBill(ctx.getImageData(0, 0, canvas.width, canvas.height));
+
+    if(!await decodeBill(
+        canvas.width, 
+        canvas.height,
+        ctx.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+            )
+        )
+    ){
+        videoOrCanvas=true;
+    }
 }
 
-async function decodeBill(imgData){
-    loading = !loading;
-    const res = await fetch('/upload',{method:'POST',body:imgData});
-    msg = res.body.json();
+async function decodeBill(width,height,imgData){
+    loading = true;
+    let res = null;
+    try{
+        res = await fetch(
+            `/upload?width=${width}&height=${height}`,
+            {
+                method:'POST',
+                body:imgData.data.buffer
+            });
+    }catch(e){
+        loading = false;
+        handleError();
+        return null;
+    }
+    if(res.status!=200){
+        loading = false;
+        handleError();
+        return null;
+    }
+    msg = await res.text();
+    loading = false;
+}
+
+function handleError(){
+    //show error component
 }
 
 </script>
@@ -75,7 +110,7 @@ async function decodeBill(imgData){
 {#if loading}
 <Loader/>
 {/if}
-
+<div class="hidden p-1 p-5 p-4 p-0"></div>
 <div class="flex flex-col h-5/6 w-full">
     {msg}
     <video 
