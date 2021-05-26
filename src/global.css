@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+    font-family: 'Roboto', sans-serif;
+    --pure-white:#ffffff;
+    --prim-color:#5D38E0;
+    --sec-color:#0000ff;
+    --tert-color:#00ff00;
+    --accent-color:#000000;
+}
+
+.bg-prim {
+    background-color: var(--prim-color);
+}
+.text-prim {
+    color: var(--prim-color);
+}
+.text-pure-white{
+    color: var(--pure-white);
+}
