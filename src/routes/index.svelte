@@ -6,7 +6,7 @@
 
 <div class="flex flex-col h-screen w-screen">
     <div class="flex flex-1 p-8 bg-prim">
-        <img src="main.svg" alt=""/>
+        <img class="mx-auto" src="main.svg" alt=""/>
     </div>
     <div class="flex flex-1 justify-center font-medium">
         <div class="m-auto flex flex-col justify-center">

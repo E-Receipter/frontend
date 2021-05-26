@@ -1,6 +1,6 @@
 <script>
-import adapter from 'webrtc-adapter';
-import {onMount,onDestroy} from 'svelte';
+import { goto } from '$app/navigation';
+import {onMount} from 'svelte';
 import Loader from '$lib/Loader.svelte';
 let DOMready;
 let stream;
@@ -91,14 +91,15 @@ async function decodeBill(width,height,imgData){
         handleError();
         return null;
     }
-    msg = await res.text();
+    const {shopId,billId} = await res.json();
+    msg = `${shopId},${billId}`;
+    goto(`/bill?billId=${billId}&shopId=${shopId}`);
     loading = false;
 }
 
 function handleError(){
     //show error component
 }
-
 </script>
 
 <style>

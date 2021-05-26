@@ -1,18 +1,18 @@
 // CRUD on bills
 import db from './db';
 
-export function list(filters){
+export async function listBills(filters){
 
 }
 
-export function details(billId){
-
+export async function getBill(billId){
+    return await db.bills.get(billId);
 }
 
-export function add(object){
-    return db.bills.put(object);
+export async function addBill(object){
+    return await db.bills.put(object);
 }
 
-export function del(billId){
-    
+export async function delBill(billId){
+    return await db.bills.delete(billId);
 }

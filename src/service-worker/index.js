@@ -6,7 +6,8 @@ import { precacheAndRoute } from 'workbox-precaching';
 import { build, timestamp } from '$service-worker';
 import { WASM_MODULE_JS,WASM_MODULE } from './settings.js';
 import { importWASM,handleScan } from './wasm.js';
-
+import { getBill,delBill,listBills } from './bill';
+import { list } from 'postcss';
 // load WASM Module JS
 importWASM(self.importScripts);
 
@@ -63,8 +64,39 @@ registerRoute(
     }),
   );
 
+//upload image
 registerRoute(
     ({ url })=>{return url.pathname === '/upload'},
     handleScan,
     'POST',
+)
+
+//get bill details
+registerRoute(
+  ({url}) => url.pathname === '/db/get',
+  async ({url}) => {
+    const billId = Number(url.searchParams.get('billId'));
+    const data = await getBill(billId);
+    delete data.trueData;
+    return new Response(JSON.stringify(data));
+  }
+)
+//delete bill details
+registerRoute(
+  ({url}) => url.pathname === '/db/get',
+  async ({url}) => {
+    const billId = Number(url.searchParams.get('billId'));
+    const data = await delBill(billId);
+    return new Response(JSON.stringify(data));
+  },
+  'DELETE'
+)
+//list bills
+registerRoute(
+  ({url}) => url.pathname === '/db',
+  async ({url}) => {
+    const filters = url.searchParams;
+    const data = await listBills(filters);
+    return new Response(JSON.stringify(data));
+  },
 )

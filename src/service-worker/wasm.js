@@ -1,5 +1,5 @@
 import {WASM_MODULE_JS,WASM_MODULE,PROTOBUFJS,PROTOFILE,JABCODEREADER} from './settings';
-import db from './db';
+import {addBill} from './bill';
 // import protobuf from 'protobufjs';
 
 let module = null;
@@ -58,20 +58,41 @@ async function protoBufDecode(value){
     const ebill = ebillType.toObject(ebillType.decode(value))
     const bill = billType.toObject(billType.decode(ebill.encryptedBill))
     return {
-        trueData: value,
+        trueData: new Uint32Array(value),
         shopId: ebill.shopId,
         ...bill,
     }
 }
 
+async function expandData(data){
+    let totalAmt=0,totalQty=0;
+    for(let item of data.items){
+        totalQty += item.qty;
+        totalAmt += item.price * item.qty;
+    }
+    return {
+        ...data,
+        totalAmt,
+        totalQty,
+    }
+}
+
 export async function handleScan({url, request}){
-    let ans = '{}';
+    let res = '{}';
     const width = url.searchParams.get('width');
     const height = url.searchParams.get('height');
     let imgData = getImageData(await request.arrayBuffer(),width,height);
     let value = await jabDecode(imgData,width,height);
     if(!value)
-        return new Response(ans);
-    ans = await protoBufDecode(value);
-    return new Response(JSON.stringify(ans));
+        return new Response(res,{status:500});
+    const decoded = await protoBufDecode(value);
+    res = await expandData(decoded);
+    return new Response(
+        JSON.stringify(
+            {
+                billId: await addBill(res),
+                shopId: res.shopId,
+            }
+        )
+    );
 }
