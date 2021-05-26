@@ -11,6 +11,11 @@
     --accent-color:#000000;
 }
 
+button{
+    outline: 2px solid transparent!important;
+    outline-offset: 2px!important;
+}
+
 .bg-prim {
     background-color: var(--prim-color);
 }

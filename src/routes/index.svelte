@@ -2,13 +2,10 @@
 </script>
 
 <style>
-.flex-2{
-    flex:2;
-}
 </style>
 
 <div class="flex flex-col h-screen w-screen">
-    <div class="flex flex-2 p-8 bg-prim">
+    <div class="flex flex-1 p-8 bg-prim">
         <img src="main.svg" alt=""/>
     </div>
     <div class="flex flex-1 justify-center font-medium">

@@ -1,5 +1,5 @@
 module.exports = {
-	mode: "jit",
+	mode: "aot",
 	purge: [
 		"./src/**/*.{html,js,svelte,ts}",
 	],
