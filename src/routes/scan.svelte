@@ -1,7 +1,8 @@
 <script>
 import { goto } from '$app/navigation';
-import {onMount} from 'svelte';
+import {onMount,onDestroy} from 'svelte';
 import Loader from '$lib/Loader.svelte';
+import BottomPop from '$lib/BottomPop.svelte';
 let DOMready;
 let stream;
 let video;
@@ -10,6 +11,19 @@ let canvas;
 
 let videoOrCanvas = true;
 let loading = false;
+let error = false;
+let errorResolve = null;
+
+async function stopVideo(){
+    if(video){
+        const stream = video.srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        video.srcObject = null;
+    }
+}
 
 async function loadCam(){
     const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -47,6 +61,15 @@ onMount(async ()=>{
     }
 })
 
+onDestroy(async () =>{
+    try{
+        await stopVideo();
+    }catch(e){
+        msg = e;
+        console.log(e);
+    }
+})
+
 async function takePicture(){
     videoOrCanvas=false;
     var ctx = canvas.getContext('2d');
@@ -67,7 +90,8 @@ async function takePicture(){
             )
         )
     ){
-        videoOrCanvas=true;
+        //Remove after making BottomPop buttons working
+        await stopVideo();
     }
 }
 
@@ -97,8 +121,18 @@ async function decodeBill(width,height,imgData){
     loading = false;
 }
 
-function handleError(){
-    //show error component
+async function handleError(){
+    const errorPromise = new Promise((resolve)=> errorResolve = resolve );
+    error=true;
+    if(await errorPromise){
+        //try again
+        await loadCam();
+        videoOrCanvas=true;
+    }else {
+        //Cancel
+        goto('/');
+    }
+    error = false;
 }
 </script>
 
@@ -125,18 +159,20 @@ function handleError(){
         class="h-full w-full"/>
     <div class="absolute z-100 flex inset-x-0 bottom-3">
         <button
-            class:p-1={videoOrCanvas} 
-            class:p-5={!videoOrCanvas} 
-            class="transition-all duration-500 bounce rounded-full m-auto bg-prim" 
+            class:p-5={videoOrCanvas}
+            class:p-1={!videoOrCanvas}
+            class="transition-all duration-500 bounce rounded-full m-auto bg-prim ring-2 ring-prim ring-offset-2" 
             on:click={takePicture}>
-            <div 
-                class="transition-all duration-500 bounce rounded-full border-2 border-white m-1"
-                class:p-4={videoOrCanvas} 
-                class:p-0={!videoOrCanvas}
-                class:border-transparent={!videoOrCanvas}
-                >
-            </div>
         </button>
     </div>
-    
 </div>
+{#if error}
+<BottomPop
+    imgSrc="scanFailed.png"
+    title="Scan Failed"
+    description="Oops Sorry, we are not able to get the Jab code, hold tight and try again"
+    noButton="Cancel"
+    yesButton="Try again!"
+    on:click={e=> errorResolve(e.detail)}
+    />
+{/if}

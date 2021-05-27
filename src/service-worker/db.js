@@ -1,4 +1,6 @@
 //Manage indexDB
+//TODO
+//add signature to db to avoid fake bill making
 import Dexie from 'dexie';
 
 const db = new Dexie('bills');

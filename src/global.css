@@ -15,13 +15,12 @@ button{
     outline: 2px solid transparent!important;
     outline-offset: 2px!important;
 }
-
-.bg-prim {
-    background-color: var(--prim-color);
-}
-.text-prim {
-    color: var(--prim-color);
-}
 .text-pure-white{
     color: var(--pure-white);
+}
+.noButton{
+    @apply rounded-full bg-pureWhite text-prim border-prim border-2 px-6 py-2;
+   }
+.yesButton{
+   @apply rounded-full bg-prim text-pureWhite border-transparent border-2 px-6 py-2;
 }
