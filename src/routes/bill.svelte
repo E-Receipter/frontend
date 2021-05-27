@@ -48,7 +48,7 @@ td {
     <div class="flex flex-col font-light">
         <div>
         <img alt='<logo>' 
-            class="float-left mr-4 h-4" 
+            class="float-left mr-4 h-16" 
             src="{`https://e-receipter.github.io/shop-data/${shop.shopId}.png`}"
             />
         <b class="">{shop.name}</b>
@@ -74,7 +74,7 @@ td {
             </div>
         </div>
     </div>
-    <div class="rounded-md shadow-lg m-2">
+    <div class="rounded-md m-2">
         <table class="w-full">
             <tr>
                 <th>Total Qty</th>
