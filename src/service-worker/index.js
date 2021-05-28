@@ -97,6 +97,7 @@ registerRoute(
   async ({url}) => {
     const filters = url.searchParams;
     const data = await listBills(filters);
+    console.log(data);
     return new Response(JSON.stringify(data));
   },
 )
