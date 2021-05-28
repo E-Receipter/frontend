@@ -1,6 +1,7 @@
 <script>
+
 </script>
 
 <div class="fixed inset-0 flex">
-    <img class="m-auto" src="/loading.svg" alt="loading.."/>
+	<img class="m-auto" src="/loading.svg" alt="loading.." />
 </div>

@@ -1,5 +1,13 @@
-import {WASM_MODULE_JS,WASM_MODULE,PROTOBUFJS,PROTOFILE,JABCODEREADER} from './settings';
-import {addBill} from './bill';
+import {
+    WASM_MODULE_JS,
+    WASM_MODULE,
+    PROTOBUFJS,
+    PROTOFILE,
+    JABCODEREADER
+} from './settings';
+import {
+    addBill
+} from './bill';
 // import protobuf from 'protobufjs';
 
 let module = null;
@@ -8,23 +16,21 @@ let ebillType = null;
 let billType = null;
 let decoder = null;
 
-export function importWASM(importer){
+export function importWASM(importer) {
     importer(WASM_MODULE_JS);
     importer(JABCODEREADER);
     importer(PROTOBUFJS);
 }
 
-async function loadWASM(){
+async function loadWASM() {
     const req = await fetch(WASM_MODULE);
     const buffer = await req.arrayBuffer();
-    module = await self.Module(
-        {
-            wasmBinary: buffer,
-        }
-    )
+    module = await self.Module({
+        wasmBinary: buffer,
+    })
 }
 
-async function loadProtoBuf(){
+async function loadProtoBuf() {
     const file = await fetch(PROTOFILE);
     const string = await file.text();
     proto = (await protobuf.parse(string)).root;
@@ -32,28 +38,29 @@ async function loadProtoBuf(){
     billType = proto.lookupType("Bill");
 }
 
-function getImageData(buffer,width,height){
+function getImageData(buffer, width, height) {
     const array = new Uint8ClampedArray(buffer);
-    return new ImageData(array,width,height);
+    return new ImageData(array, width, height);
 }
 
-async function jabDecode(imgData,width,height){
+async function jabDecode(imgData, width, height) {
     let value = [];
-    if(!module)
+    if (!module)
         await loadWASM();
-    if(!decoder){
-        decoder = new JABCodeDecoder(module,width,height);
-    }
-    else if((decoder.width!=width)||(decoder.height!=height)){
+    if (!decoder) {
+        decoder = new JABCodeDecoder(module, width, height);
+    } else if ((decoder.width != width) || (decoder.height != height)) {
         decoder.clean();
-        decoder = new JABCodeDecoder(module,width,height);
+        decoder = new JABCodeDecoder(module, width, height);
     }
     value = decoder.decode(imgData);
-    return (value.length>0)?value:null;
+    if (value.length > 0)
+        return value;
+    return null;
 }
 
-async function protoBufDecode(value){
-    if(!proto)
+async function protoBufDecode(value) {
+    if (!proto)
         await loadProtoBuf();
     const ebill = ebillType.toObject(ebillType.decode(value))
     const bill = billType.toObject(billType.decode(ebill.encryptedBill))
@@ -64,14 +71,15 @@ async function protoBufDecode(value){
     }
 }
 
-async function expandData(data){
-    let totalAmt=0,totalQty=0;
-    for(let item of data.items){
+async function expandData(data) {
+    let totalAmt = 0,
+        totalQty = 0;
+    for (let item of data.items) {
         totalQty += item.qty;
         totalAmt += item.price * item.qty;
     }
     const res = await fetch(`https://e-receipter.github.io/shop-data/${data.shopId}.json`);
-    if(res.ok){
+    if (res.ok) {
         const shopData = await res.json();
         return {
             ...data,
@@ -85,23 +93,30 @@ async function expandData(data){
     }
 }
 
-export async function handleScan({url, request}){
+export async function handleScan({
+    url,
+    request
+}) {
     let res = '{}';
     const width = url.searchParams.get('width');
     const height = url.searchParams.get('height');
-    let imgData = getImageData(await request.arrayBuffer(),width,height);
-    let value = await jabDecode(imgData,width,height);
-    if(!value)
-        return new Response(res,{status:500,statusText:'Scan Failed'});
+    let imgData = getImageData(await request.arrayBuffer(), width, height);
+    let value = await jabDecode(imgData, width, height);
+    if (!value)
+        return new Response(res, {
+            status: 500,
+            statusText: 'Scan Failed'
+        });
     const decoded = await protoBufDecode(value);
     res = await expandData(decoded);
-    if(!res)
-        return new Response(res,{status:500,statusText:'shop data fetch failed'});
+    if (!res)
+        return new Response(res, {
+            status: 500,
+            statusText: 'shop data fetch failed'
+        });
     return new Response(
-        JSON.stringify(
-            {
-                billId: await addBill(res),
-            }
-        )
+        JSON.stringify({
+            id: await addBill(res),
+        })
     );
 }
