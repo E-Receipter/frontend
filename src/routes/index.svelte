@@ -1,10 +1,14 @@
 <script>
+import { fade } from 'svelte/transition';
 </script>
 
 <style>
 </style>
 
-<div class="flex flex-col h-screen w-screen">
+<div 
+    in:fade="{{ duration: 500,delay:500 }}" 
+    out:fade="{{ duration: 500 }}"
+    class="flex flex-col h-5/6 w-screen">
     <div class="flex flex-1 p-8 bg-prim">
         <img class="mx-auto" src="main.svg" alt=""/>
     </div>

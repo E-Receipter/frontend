@@ -1,5 +1,6 @@
 <script>
 import { goto } from '$app/navigation';
+import { fade } from 'svelte/transition';
 import {onMount,onDestroy} from 'svelte';
 import Loader from '$lib/Loader.svelte';
 import BottomPop from '$lib/BottomPop.svelte';
@@ -15,13 +16,13 @@ let error = false;
 let errorResolve = null;
 
 async function stopVideo(){
-    if(video){
-        const stream = video.srcObject;
+    if(stream){
+        // const stream = video.srcObject;
         const tracks = stream.getTracks();
         tracks.forEach(function(track) {
             track.stop();
         });
-        video.srcObject = null;
+        // video.srcObject = null;
     }
 }
 
@@ -73,8 +74,8 @@ onDestroy(async () =>{
 async function takePicture(){
     videoOrCanvas=false;
     var ctx = canvas.getContext('2d');
-    canvas.width = video.clientWidth;
-    canvas.height = video.clientHeight;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     ctx.drawImage(
         video,0,0,canvas.width,canvas.height,
     );
@@ -115,9 +116,8 @@ async function decodeBill(width,height,imgData){
         handleError();
         return null;
     }
-    const {shopId,billId} = await res.json();
-    msg = `${shopId},${billId}`;
-    goto(`/bill?billId=${billId}&shopId=${shopId}`);
+    const {billId} = await res.json();
+    goto(`/bill?billId=${billId}`);
     loading = false;
 }
 
@@ -146,7 +146,10 @@ async function handleError(){
 <Loader/>
 {/if}
 <div class="hidden p-1 p-5 p-4 p-0"></div>
-<div class="flex flex-col h-5/6 w-full">
+<div 
+    in:fade="{{ duration: 500,delay:500 }}"
+    out:fade="{{ duration: 500 }}"
+    class="flex flex-col h-5/6 w-full">
     {msg}
     <video 
         alt="loading..." 
@@ -156,7 +159,7 @@ async function handleError(){
     <canvas 
         bind:this={canvas} 
         class:hidden={videoOrCanvas} 
-        class="h-full w-full"/>
+        class=""/>
     <div class="absolute z-100 flex inset-x-0 bottom-3">
         <button
             class:p-5={videoOrCanvas}

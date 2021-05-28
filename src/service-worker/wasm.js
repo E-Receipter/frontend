@@ -70,10 +70,18 @@ async function expandData(data){
         totalQty += item.qty;
         totalAmt += item.price * item.qty;
     }
-    return {
-        ...data,
-        totalAmt,
-        totalQty,
+    const res = await fetch(`https://e-receipter.github.io/shop-data/${data.shopId}.json`);
+    if(res.ok){
+        const shopData = await res.json();
+        return {
+            ...data,
+            totalAmt,
+            totalQty,
+            shopName: shopData.name,
+            shopData,
+        }
+    } else {
+        return null;
     }
 }
 
@@ -84,14 +92,15 @@ export async function handleScan({url, request}){
     let imgData = getImageData(await request.arrayBuffer(),width,height);
     let value = await jabDecode(imgData,width,height);
     if(!value)
-        return new Response(res,{status:500});
+        return new Response(res,{status:500,statusText:'Scan Failed'});
     const decoded = await protoBufDecode(value);
     res = await expandData(decoded);
+    if(!res)
+        return new Response(res,{status:500,statusText:'shop data fetch failed'});
     return new Response(
         JSON.stringify(
             {
                 billId: await addBill(res),
-                shopId: res.shopId,
             }
         )
     );

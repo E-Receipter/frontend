@@ -1,40 +1,22 @@
-<script context="module">
-    // TODO
-    // remove shopData loading. to avoid fake bill making
-
-    export async function load({ page, fetch, session, context }) {
-        let shopData = null;
-        let billData = null;
-        const shopId = page.query.get('shopId');
-        const billId = page.query.get('billId');
-        if(typeof window !== 'undefined'){
-            billData = await fetch(`/db/get?billId=${billId}`);
-        }
-        shopData = await fetch(`https://e-receipter.github.io/shop-data/${shopId}.json`);
-        if (shopData.ok) {
-            return {
-                props: {
-                    bill: (billData)?await billData.json():null,
-                    shop:{
-                        shopId,
-                        ...await shopData.json()
-                        },
-                }
-            };
-        }
-        return {
-            status: shopData.status,
-            error: new Error(`Could not load`),
-        };
-    }
-</script>
-
 <script>
+    import {onMount} from 'svelte';
+    import { fly } from 'svelte/transition';
     import { goto } from '$app/navigation';
     import ItemList from '$lib/ItemList.svelte';
+    import ShopCard from '$lib/ShopCard.svelte';
     import BottomPop from '$lib/BottomPop.svelte';
-    export let bill;
-    export let shop;
+    let bill = null;
+
+    onMount(async() => {
+        const query = new URLSearchParams(window.location.search);
+        const billId = query.get('billId');
+        const res = await fetch(`/db/get?billId=${billId}`);
+        if(res.ok){
+            bill = await res.json();
+        }else{
+            bill = null;
+        }
+    })
 
     let delPopUp = false;
     let deleteResolve = null;
@@ -64,26 +46,12 @@ td {
 }
 </style>
 
-<div class="flex flex-col m-2">
+<div 
+    in:fly="{{ x: 200, duration: 500,delay:500 }}"
+    out:fly="{{ x: 200, duration: 500 }}"
+    class="flex flex-col m-2">
     <div class="flex flex-col font-light">
-        <div>
-        <img alt='<logo>' 
-            class="float-left mr-4 h-16" 
-            src="{`https://e-receipter.github.io/shop-data/${shop.shopId}.png`}"
-            />
-        <b class="">{shop.name}</b>
-        <p class="font-medium text-sm">{shop.address}</p>
-        </div>
-        <div class="flex justify-between mt-2 py-2 border-t border-dashed border-black">
-            <span>Contact no: {shop.phone}</span>
-            <span>GSTIN: {shop.gstin}</span>
-        </div>
-        {#if bill}
-            <div class="flex justify-between border-black border-t border-b border-dashed py-2">
-                <span>Date: {new Date(bill.datetime).toDateString()}</span>
-                <span>Time: {new Date(bill.datetime).toLocaleTimeString()}</span>
-            </div>
-        {/if}
+        <ShopCard bill={bill}/>
     </div>
     <div class="">
         <div class="mx-2">
@@ -107,7 +75,7 @@ td {
                 </tr>
             {:else}
                 <tr>
-                    <td colspan="2">no data available!</td>
+                    <td class="flex" colspan="2"><img class="m-auto h-28" src="/loading.svg" alt="loading.."/></td>
                 </tr>
             {/if}
         </table>

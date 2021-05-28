@@ -41,7 +41,7 @@ table tr:nth-child(even){
 			{/each}
 		{:else}
 			<tr>
-				<td colspan="4">No data available!</td>
+				<td class="flex" colspan="4"><img class="m-auto h-28" src="/loading.svg" alt="loading.."/></td>
 			</tr>
 		{/if}
 	</table>

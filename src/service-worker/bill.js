@@ -10,23 +10,23 @@ function filterObject(array,keys){
 }
 
 export async function listBills(filters){
-    const date_after = Number(filters.get('date_after'));
-    const date_before = Number(filters.get('date_before'));
+    const dateAfter = Number(filters.get('date_after'));
+    const dateBefore = Number(filters.get('date_before'));
 
-    const shop_name = filters.get('shop_name');
+    const shopName = filters.get('shop_name');
 
-    const item_name = filters.get('item_name');
+    const itemName = filters.get('item_name');
 
     let query = db.bills;
-    if(date_after)
-        query = query.where('datetime').above(date_after);
-    if(date_before)
-        query = query.where('datetime').below(date_before);
-    if(item_name){
-        const item_name_up = item_name.toUpperCase();
+    if(dateAfter)
+        query = query.where('datetime').above(dateAfter);
+    if(dateBefore)
+        query = query.where('datetime').below(dateBefore);
+    if(itemName){
+        const itemNameUp = itemName.toUpperCase();
         query = query.filter((bill)=>{
             for(let item of bill.items){
-                if(item.name.toUpperCase().indexOf(item_name_up) != -1)
+                if(item.name.toUpperCase().indexOf(itemNameUp) != -1)
                     return true;
             }
         });

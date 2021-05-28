@@ -6,7 +6,7 @@
     $: section = $page.path.split('/')[1];
 </script>
 
-{#if section}
+
 <Header name={section}/>
-{/if}
+
 <slot/>
