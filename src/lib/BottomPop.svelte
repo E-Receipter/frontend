@@ -11,6 +11,9 @@ const dispatch = createEventDispatcher();
 </script>
 
 <style>
+.shadow-special{
+    box-shadow: 0px -1px 8px -2px rgb(0 0 0 / 31%);
+}
 .noButton{
  @apply rounded-full bg-pureWhite text-prim border-prim border-2 px-6 py-2;
 }
@@ -20,7 +23,7 @@ const dispatch = createEventDispatcher();
 </style>
 
 <div transition:fly="{{ y: 200, duration: 500 }}"
-    class="bg-white flex flex-col rounded-t-3xl fixed inset-x-0 bottom-0">
+    class="bg-white shadow-special flex flex-col rounded-t-3xl fixed inset-x-0 bottom-0">
     <div class="flex flex-col justify-between py-4 mx-2">
         <img class="flex-1 mx-auto" style="max-width:50%;" src={imgSrc}/>
         <span class="flex-1 mx-auto my-2 text-center">{title}</span>

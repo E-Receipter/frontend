@@ -4,33 +4,32 @@ export let bill;
 
 <style>
 th {
-    @apply text-right text-gray-600 p-2;
+    @apply text-center text-gray-600 py-2;
 }
 td {
-    @apply text-left p-2 font-light;
-}
-td.numeric{
-	@apply text-right;
+    @apply text-center py-2 font-light break-words;
 }
 tr {
-    @apply py-4 flex justify-evenly w-full;
+    @apply py-4 w-full;
 }
-tr:nth-child(odd){
-    @apply bg-gray-200;
+table tr:nth-child(odd){
+    @apply bg-gray-100;
 }
-tr:nth-child(even){
+table tr:nth-child(even){
     @apply bg-white;
 }
 </style>
 <div class="pt-2 pb-1">Item Details</div>
-<div style="max-height:60vh;" class="relative overflow-auto rounded-t-lg">
-	<table class="bg-gray-200 w-full">
-		<tr class="sticky top-0">
+<div style="max-height:50vh;" class="relative overflow-auto rounded-t-lg">
+	<table class="sticky top-0 bg-gray-100 w-full table-fixed">
+		<tr class="">
 			<th>Item</th>
 			<th>MRP</th>
 			<th>QTY</th>
 			<th>NET Amt</th>
 		</tr>
+	</table>
+	<table class="bg-gray-100 w-full table-fixed">
 		{#if bill}
 			{#each bill.items as item}
 				<tr>
