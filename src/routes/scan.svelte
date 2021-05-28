@@ -64,7 +64,8 @@
 					video: {
 						width: { min: 400, ideal: 1200 },
 						height: { min: 400, ideal: 1200 },
-						aspectRatio: { ideal: 1 }
+						aspectRatio: { ideal: 1 },
+						facingMode: { ideal: "environment" },
 					},
 					audio: false
 				},
