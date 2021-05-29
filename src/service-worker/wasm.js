@@ -89,7 +89,13 @@ async function expandData(data) {
             shopData,
         }
     } else {
-        return null;
+        return {
+            ...data,
+            totalAmt,
+            totalQty,
+            shopName: null,
+            shopData: null,
+        };
     }
 }
 

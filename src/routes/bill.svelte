@@ -8,16 +8,33 @@
 	import BottomPop from '$lib/BottomPop.svelte';
 	let bill = null;
 	let backPage = false;
-	onMount(async () => {
-		const query = new URLSearchParams(window.location.search);
-		const id = query.get('id');
-		backPage = Boolean(query.get('back_page'));
+
+	async function loadBill(id){
 		const res = await fetch(`/db/get?id=${id}`);
+		if (res.ok) {
+			bill = await res.json();
+			if((!bill.shopName)&&(navigator.onLine)){
+				fixBill(id);
+			}
+		} else {
+			bill = null;
+		}
+	}
+
+	async function fixBill(id){
+		const res = await fetch(`/db/fix?id=${id}`);
 		if (res.ok) {
 			bill = await res.json();
 		} else {
 			bill = null;
 		}
+	}
+
+	onMount(async () => {
+		const query = new URLSearchParams(window.location.search);
+		const id = query.get('id');
+		backPage = Boolean(query.get('back_page'));
+		await loadBill(id);
 	});
 
 	let delPopUp = false;
@@ -84,7 +101,7 @@
 						<b>{bill.totalQty}</b>
 					</td>
 					<td class="text-green-500">
-						<b>{bill.totalAmt.toFixed(2)}</b>
+						<b> ₹ {bill.totalAmt.toFixed(2)}</b>
 					</td>
 				</tr>
 			{:else}

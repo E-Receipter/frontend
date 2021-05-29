@@ -29,7 +29,8 @@ import {
 import {
   getBill,
   delBill,
-  listBills
+  listBills,
+  updateBill,
 } from './bill';
 
 self.addEventListener('activate', () => {
@@ -149,6 +150,28 @@ registerRoute(
   }) => {
     const filters = url.searchParams;
     const data = await listBills(filters);
+    return new Response(JSON.stringify(data));
+  },
+)
+
+//fix bill
+registerRoute(
+  ({
+    url
+  }) => url.pathname === '/db/fix',
+  async ({
+    url
+  }) => {
+    const id = Number(url.searchParams.get('id'));
+    let data = await getBill(id);
+    delete data.trueData;
+    const res = await fetch(`https://e-receipter.github.io/shop-data/${data.shopId}.json`);
+    if(res.ok){
+      const shopData = await res.json();
+      data.shopName = shopData.name;
+      data.shopData = shopData;
+      updateBill(id,{shopData,shopName:data.shopName});
+    }
     return new Response(JSON.stringify(data));
   },
 )

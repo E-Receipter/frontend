@@ -45,3 +45,7 @@ export async function addBill(object) {
 export async function delBill(id) {
     return await db.bills.delete(id);
 }
+
+export async function updateBill(id,changes) {
+    return await db.bills.update(id,changes);
+}

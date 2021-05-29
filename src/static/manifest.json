@@ -1,0 +1,10 @@
+{
+    "theme_color" : "#5D38E0",
+    "background_color" : "#5D38E0",
+    "display" : "standalone",
+    "scope" : "/",
+    "start_url" : "/",
+    "name" : "E-Receipt",
+    "short_name" : "E-Receipt",
+    "description" : "Scan E-receipts to get your bill"
+}

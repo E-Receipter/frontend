@@ -26,6 +26,6 @@
 		</p>
 	</div>
 	<div class="text-lg text-gray-600">
-		<b>${bill.totalAmt.toFixed(2)}</b>
+		<b>₹ {bill.totalAmt.toFixed(2)}</b>
 	</div>
 </div>

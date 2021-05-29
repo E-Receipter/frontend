@@ -151,9 +151,9 @@
 	}
 </style>
 
-{#if loading}
+<div class:hidden={!loading}>
 	<Loader />
-{/if}
+</div>
 <div class="hidden p-1 p-5 p-4 p-0" />
 <div
 	in:fade={{ duration: pageTransitionDuration, delay: pageTransitionDelay }}

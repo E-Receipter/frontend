@@ -6,16 +6,23 @@
 	export let name;
 	$: fullName = map[name];
 
-	let percent = 0;
+	let percent = 1;
 	let timer = null;
 
-	$: if(navigating){
+	$: if(($navigating)&&(!timer)){
 			timer = setInterval(()=>{
 				let left = 100 - percent;
-				percent += left*0.1;
-			},200);
-		} else if(timer){
+				percent += left*0.3;
+				console.log($navigating);
+			},500);
+		}
+
+	$: if((!$navigating)&&(timer)){
 			clearInterval(timer);
+			percent = 100;
+			setTimeout(()=>{
+				percent = 1;
+			},500);
 		}
 
 </script>
@@ -24,13 +31,13 @@
 	.progress{
 		height: 2px;
 		transition-property: width;
-		@apply duration-500 ease-in-out;
+		@apply bg-white duration-500 ease-linear;
 	}
 </style>
-{#if navigating}
-<div class="absolute top-0 w-full">
-	<div class="progress" style={`width:${percent}%`}></div>
-</div>
+{#if $navigating}
+	<div class="absolute top-0 w-full z-40">
+		<div class="progress" style={`width:${percent}%`}></div>
+	</div>
 {/if}
 <div
 	in:fade={{ duration: pageTransitionDuration, delay: pageTransitionDelay }}
@@ -39,7 +46,7 @@
 	{#if fullName}
 		<img
 			src="chevron.svg"
-			class="cursor-pointer"
+			class="cursor-pointer text-white"
 			alt="<"
 			on:click={e => {
 				if (window) {

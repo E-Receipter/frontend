@@ -35,10 +35,10 @@
 			{#each bill.items as item}
 				<tr>
 					<td>{item.name}</td>
-					<td class="numeric">{item.price.toFixed(2)}</td>
+					<td class="numeric">₹ {item.price.toFixed(2)}</td>
 					<td class="numeric">{item.qty}</td>
 					<td class="numeric">
-						<b>{(item.price * item.qty).toFixed(2)}</b>
+						<b>₹ {(item.price * item.qty).toFixed(2)}</b>
 					</td>
 				</tr>
 			{/each}
