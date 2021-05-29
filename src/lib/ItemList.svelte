@@ -21,7 +21,7 @@
 </style>
 
 <div class="pt-2 pb-1">Item Details</div>
-<div style="max-height:50vh;" class="relative overflow-auto rounded-t-lg">
+<div style="max-height:36vh;" class="relative overflow-auto rounded-t-lg">
 	<table class="sticky top-0 bg-gray-100 w-full table-fixed">
 		<tr class="">
 			<th>Item</th>
