@@ -3,7 +3,7 @@
 	import { fade } from 'svelte/transition';
 	import { pageTransitionDelay, pageTransitionDuration } from '$lib/uiSettings.js';
 	import { onMount } from 'svelte';
-	let billList = [];
+	let billList = null;
 
 	onMount(async () => {
 		const res = await fetch('/db');
@@ -17,11 +17,17 @@
 	in:fade={{ duration: pageTransitionDuration, delay: pageTransitionDelay }}
 	out:fade={{ duration: pageTransitionDelay }}
 	class="flex flex-col mx-2">
-	{#if billList.length > 0}
+	{#if !billList}
+		<div class="w-full flex">
+			<div class="m-auto">Loading...</div>
+		</div>
+	{:else if billList.length > 0}
 		{#each billList as bill}
 			<BillCard {bill} />
 		{/each}
 	{:else}
-		<div class="w-full">Loading...</div>
+		<div style="height:50vh;" class="w-full flex">
+			<div class="m-auto">No Bills to show</div>
+		</div>
 	{/if}
 </div>

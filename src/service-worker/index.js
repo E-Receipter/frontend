@@ -32,6 +32,10 @@ import {
   listBills
 } from './bill';
 
+self.addEventListener('activate', () => {
+  clients.claim();
+  console.log('ready ayyi!');
+});
 // load WASM Module JS
 importWASM(self.importScripts);
 

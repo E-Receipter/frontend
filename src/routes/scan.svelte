@@ -97,16 +97,14 @@
 
 	async function takePicture() {
 		videoOrCanvas = false;
-		var ctx = canvas.getContext('2d');
-		if (
-			!(await decodeBill(
+		let  ctx = canvas.getContext('2d');
+		let decodePromise = decodeBill(
 				canvas.width,
 				canvas.height,
 				ctx.getImageData(0, 0, canvas.width, canvas.height)
-			))
-		) {
-			await stopVideo();
-		}
+			);
+		await stopVideo();
+		return await decodePromise;
 	}
 
 	async function decodeBill(width, height, imgData) {
