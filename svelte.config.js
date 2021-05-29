@@ -1,5 +1,6 @@
 import preprocess from "svelte-preprocess";
 import adapter from '@sveltejs/adapter-netlify';
+// import adapter from '@sveltejs/adapter-static';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [
@@ -16,9 +17,14 @@ const config = {
 			serviceWorker: 'src/service-worker',
 			template: 'src/app.html'
 		},
-		adapter: adapter(), // currently the adapter does not take any options
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte'
+		target: '#svelte',
+		// adapter: adapter({ //not working
+		// 	pages:'build',
+		// 	assets:'build',
+		// 	fallback: '200.html',
+		// }),
+		adapter: adapter(), //netlify
 	}
 };
 

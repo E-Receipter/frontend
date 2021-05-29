@@ -18,7 +18,7 @@
 	out:fade={{ duration: pageTransitionDelay }}
 	class="flex flex-col mx-2">
 	{#if !billList}
-		<div class="w-full flex">
+		<div style="height:50vh;" class="w-full flex">
 			<div class="m-auto">Loading...</div>
 		</div>
 	{:else if billList.length > 0}

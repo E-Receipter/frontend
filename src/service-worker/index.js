@@ -15,7 +15,6 @@ import {
   precacheAndRoute
 } from 'workbox-precaching';
 import {
-  build,
   timestamp
 } from '$service-worker';
 import {
@@ -42,12 +41,6 @@ importWASM(self.importScripts);
 
 //precache
 precacheAndRoute([
-  ...build.map((url) => {
-    return {
-      url: url,
-      revision: timestamp,
-    }
-  }),
   {
     url: WASM_MODULE_JS,
     revision: timestamp,

@@ -46,7 +46,7 @@
 	{#if fullName}
 		<img
 			src="chevron.svg"
-			class="cursor-pointer text-white"
+			class="cursor-pointer text-white h-8"
 			alt="<"
 			on:click={e => {
 				if (window) {
@@ -55,7 +55,7 @@
 			}} />
 	{/if}
 	<div class="flex-1 flex">
-		<span class="mx-auto">{fullName ? fullName : ''}</span>
+		<span class="m-auto">{fullName ? fullName : ''}</span>
 	</div>
-	<img class="opacity-0" src="chevron.svg" alt="<" />
+	<img class="opacity-0 h-8" src="chevron.svg" alt=">" />
 </div>

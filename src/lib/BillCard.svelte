@@ -13,7 +13,7 @@
 			alt="<logo>"
 			class="float-left mr-4 h-16 rounded-lg"
 			src={`https://e-receipter.github.io/shop-data/${bill.shopId}.png`} />
-		<b class="text-lg">{bill.shopName}</b>
+		<b class="text-md">{bill.shopName}</b>
 		<p class="font-light text-gray-600 flex justify-between">
 			<span>{bill.totalQty} items</span>
 			<span>
@@ -25,7 +25,7 @@
 			</span>
 		</p>
 	</div>
-	<div class="text-lg text-gray-600">
+	<div class="text-md text-gray-600">
 		<b>₹ {bill.totalAmt.toFixed(2)}</b>
 	</div>
 </div>

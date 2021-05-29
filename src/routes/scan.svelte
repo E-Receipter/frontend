@@ -120,7 +120,7 @@
 			handleError();
 			return null;
 		}
-		if (res.status != 200) {
+		if (!res.ok) {
 			loading = false;
 			handleError();
 			return null;
@@ -180,5 +180,6 @@
 		description="Oops Sorry, we are not able to get the Jab code, hold tight and try again"
 		noButton="Cancel"
 		yesButton="Try again!"
+		defaultAction=true
 		on:click={e => errorResolve(e.detail)} />
 {/if}
