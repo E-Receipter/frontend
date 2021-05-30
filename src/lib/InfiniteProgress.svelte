@@ -25,9 +25,9 @@ onDestroy(()=>{
 		@apply duration-500 ease-linear rounded-lg;
 	}
 	.neu-bg {
-background: linear-gradient(45deg, #5432ca, #643cf0);
-box-shadow:  21px -21px 42px #352080,
-             -21px 21px 42px #8550ff;}
+background: linear-gradient(315deg, #5432ca, #643cf0);
+box-shadow:  -9px -9px 18px #331f7b,
+             9px 9px 18px #8751ff;}
 </style>
 
 <div class="neu-bg w-full z-40 rounded-xl p-1 bg-purple-900">
