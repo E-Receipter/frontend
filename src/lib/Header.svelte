@@ -6,7 +6,7 @@
 	export let name;
 	$: fullName = map[name];
 
-	let percent = 1;
+	let percent = 0;
 	let timer = null;
 
 	$: if(($navigating)&&(!timer)){
@@ -29,9 +29,8 @@
 
 <style>
 	.progress{
-		height: 2px;
 		transition-property: width;
-		@apply bg-white duration-500 ease-linear;
+		@apply h-2 bg-white duration-500 ease-linear rounded-r-xl;
 	}
 </style>
 {#if $navigating}

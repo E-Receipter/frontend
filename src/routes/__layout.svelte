@@ -24,9 +24,9 @@
 {#if !ready}
 	<FullScreenLoading />
 {/if}
-{#if $navigating}
+<!-- {#if $navigating}
+<div class="absolute inset-0 bg-gray-600 opacity-50"></div>
 	<Loader/>
-	<div class="absolute inset-0 bg-gray-600 opacity-50"></div>
-{/if}
+{/if} -->
 <Header name={section} />
 <slot />

@@ -1,4 +1,5 @@
 <script>
+	import getUserMedia from '$lib/getUserMedia.js';
 	import { goto } from '$app/navigation';
 	import { fade } from 'svelte/transition';
 	import { pageTransitionDelay, pageTransitionDuration } from '$lib/uiSettings.js';
@@ -51,28 +52,30 @@
 	}
 
 	async function loadCam() {
-		const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		if (!getUserMedia) {
-			msg = 'no user media';
-			console.log('no user media');
-			return;
-		}
-		stream = await new Promise((resolve, reject) => {
-			getUserMedia.call(
-				navigator,
-				{
-					video: {
-						width: { min: 400, ideal: 1200 },
-						height: { min: 400, ideal: 1200 },
-						aspectRatio: { ideal: 1 },
-						facingMode: { ideal: "environment" },
-					},
-					audio: false
-				},
-				resolve,
-				reject
-			);
-		});
+		let constraints = {
+			video: {
+				width: { min: 400, ideal: 1200 },
+				height: { min: 400, ideal: 1200 },
+				aspectRatio: { ideal: 1 },
+				facingMode: { ideal: 'environment' }
+			},
+			audio: false
+		};
+		// const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+		// if (!getUserMedia) {
+		// 	msg = 'no user media';
+		// 	console.log('no user media');
+		// 	return;
+		// }
+		// stream = await new Promise((resolve, reject) => {
+		// 	getUserMedia.call(
+		// 		navigator,
+
+		// 		resolve,
+		// 		reject
+		// 	);
+		// });
+		stream = await getUserMedia(constraints);
 		video.srcObject = stream;
 		video.play();
 		requestAnimationFrame(animateCanvas);
@@ -97,12 +100,12 @@
 
 	async function takePicture() {
 		videoOrCanvas = false;
-		let  ctx = canvas.getContext('2d');
+		let ctx = canvas.getContext('2d');
 		let decodePromise = decodeBill(
-				canvas.width,
-				canvas.height,
-				ctx.getImageData(0, 0, canvas.width, canvas.height)
-			);
+			canvas.width,
+			canvas.height,
+			ctx.getImageData(0, 0, canvas.width, canvas.height)
+		);
 		await stopVideo();
 		return await decodePromise;
 	}
@@ -149,6 +152,12 @@
 	.bounce {
 		transition-timing-function: cubic-bezier(0.6, -0.51, 0.57, 1);
 	}
+	.neu-canvas {
+		width: 90%;
+		border-radius: 0.5rem;
+		background: #ffffff;
+		box-shadow: 1px -1px 0px #cccccc, -5px -5px 10px #ffffff;
+	}
 </style>
 
 <div class:hidden={!loading}>
@@ -162,7 +171,7 @@
 	{msg}
 	<div class="m-auto flex">
 		<video alt="loading..." bind:this={video} class="hidden" />
-		<canvas bind:this={canvas} width="480" height="480" class="m-auto" style="width:90%;" />
+		<canvas bind:this={canvas} width="480" height="480" class="m-auto neu-canvas" />
 	</div>
 	<div class="absolute z-100 flex inset-x-0 bottom-6">
 		<button
@@ -180,6 +189,6 @@
 		description="Oops Sorry, we are not able to get the Jab code, hold tight and try again"
 		noButton="Cancel"
 		yesButton="Try again!"
-		defaultAction=true
+		defaultAction="true"
 		on:click={e => errorResolve(e.detail)} />
 {/if}
