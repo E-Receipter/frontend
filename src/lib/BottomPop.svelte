@@ -32,7 +32,7 @@
 	transition:fly={{ y: 200, duration: 500 }}
 	class="bg-white shadow-special flex flex-col rounded-t-3xl fixed inset-x-0 bottom-0 z-20">
 	<div class="flex flex-col justify-between py-4 mx-2">
-		<img class="flex-1 mx-auto" style="max-width:50%;" src={imgSrc} />
+		<img class="flex-1 mx-auto h-32" style="max-width:50%;" src={imgSrc} />
 		<span class="flex-1 mx-auto my-2 text-center">{title}</span>
 		<span class="flex-1 mx-auto text-gray-500 text-center">{description}</span>
 	</div>

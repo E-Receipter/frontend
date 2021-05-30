@@ -164,7 +164,7 @@
 		<video alt="loading..." bind:this={video} class="hidden" />
 		<canvas bind:this={canvas} width="480" height="480" class="m-auto" style="width:90%;" />
 	</div>
-	<div class="absolute z-100 flex inset-x-0 bottom-3">
+	<div class="absolute z-100 flex inset-x-0 bottom-6">
 		<button
 			class:p-5={videoOrCanvas}
 			class:p-1={!videoOrCanvas}
