@@ -23,7 +23,8 @@ import {
 } from './settings.js';
 import {
   importWASM,
-  handleScan
+  handleScan,
+  generateImage,
 } from './wasm.js';
 import {
   getBill,
@@ -129,6 +130,27 @@ registerRoute(
     },
     'DELETE'
 )
+
+//verify bill
+registerRoute(
+  ({
+    url
+  }) => url.pathname === '/db/verify',
+  async ({
+      url
+    }) => {
+      const id = Number(url.searchParams.get('id'));
+      const data = await getBill(id);
+      const array = data.trueData;
+      const imgData = await generateImage(array);
+      const formdata = new FormData();
+      formdata.append('width',imgData.width);
+      formdata.append('height',imgData.height);
+      formdata.append('data',new Blob([imgData.data]))
+      return new Response(formdata);
+    },
+)
+
 //list bills
 registerRoute(
   ({

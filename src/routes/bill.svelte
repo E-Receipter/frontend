@@ -6,6 +6,7 @@
 	import ItemList from '$lib/ItemList.svelte';
 	import ShopCard from '$lib/ShopCard.svelte';
 	import BottomPop from '$lib/BottomPop.svelte';
+	import VerifyBottomPop from '$lib/VerifyBottomPop.svelte';
 	let bill = null;
 	let backPage = false;
 
@@ -60,6 +61,17 @@
 	async function saveBill() {
 		goto('/');
 	}
+
+	let verifyPopUp = false;
+	let verifyResolve = null;
+	async function verifyBill(){
+		const verifyPromise = new Promise(resolve =>{
+			verifyResolve = resolve;
+		});
+		verifyPopUp = true;
+		const verifyReturn  = await verifyPromise;
+		verifyPopUp = false;
+	}
 </script>
 
 <style>
@@ -85,6 +97,9 @@
 				<button class="noButton" on:click={deleteBill}>Delete</button>
 				{#if !backPage}
 					<button class="yesButton" on:click={saveBill}>Save</button>
+				{/if}
+				{#if backPage}
+					<button class="yesButton" on:click={verifyBill}>Verify</button>
 				{/if}
 			</div>
 		</div>
@@ -122,4 +137,7 @@
 		noButton="Cancel"
 		yesButton="Delete"
 		on:click={e => deleteResolve(e.detail)} />
+{/if}
+{#if verifyPopUp}
+	<VerifyBottomPop id={bill.id} on:click={e => verifyResolve(e.detail)}/>
 {/if}

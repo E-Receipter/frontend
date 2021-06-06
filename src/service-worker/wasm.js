@@ -15,6 +15,7 @@ let proto = null;
 let ebillType = null;
 let billType = null;
 let decoder = null;
+let encoder = null;
 
 export function importWASM(importer) {
     importer(WASM_MODULE_JS);
@@ -57,6 +58,16 @@ async function jabDecode(imgData, width, height) {
     if (value.length > 0)
         return value;
     return null;
+}
+
+async function jabEncode(data) {
+    if (!module)
+        await loadWASM();
+    if (!encoder) {
+        encoder = new JABCodeEncoder(module);
+    }
+    let imgData = encoder.encode(data);
+    return imgData;
 }
 
 async function protoBufDecode(value) {
@@ -125,4 +136,9 @@ export async function handleScan({
             id: await addBill(res),
         })
     );
+}
+
+export async function generateImage(data) {
+    let imgData = await jabEncode(data);
+    return imgData;
 }

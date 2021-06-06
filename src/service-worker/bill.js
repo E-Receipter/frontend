@@ -22,6 +22,8 @@ export async function listBills(filters) {
         query = query.where('datetime').above(dateAfter);
     if (dateBefore)
         query = query.where('datetime').below(dateBefore);
+    if(shopName)
+        query = query.where('shopName').equalsIgnoreCase(shopName);
     if (itemName) {
         const itemNameUp = itemName.toUpperCase();
         query = query.filter((bill) => {
@@ -31,7 +33,8 @@ export async function listBills(filters) {
             }
         });
     }
-    return filterObject(await query.toArray(), ['trueData']);
+    query = await query.reverse().sortBy('datetime');
+    return filterObject(query, ['trueData']);
 }
 
 export async function getBill(id) {
