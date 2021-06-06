@@ -2,7 +2,7 @@
 	export let bill;
 </script>
 
-{#if bill}
+{#if bill && bill.shopData}
 	<div>
 		<img
 			alt="<logo>"
@@ -14,10 +14,6 @@
 	<div class="flex justify-between mt-2 py-2 border-t border-dashed border-black">
 		<span>Contact no: {bill.shopData.phone}</span>
 		<span>GSTIN: {bill.shopData.gstin}</span>
-	</div>
-	<div class="flex justify-between border-black border-t border-b border-dashed py-2">
-		<span>Date: {new Date(bill.datetime).toDateString()}</span>
-		<span>Time: {new Date(bill.datetime).toLocaleTimeString()}</span>
 	</div>
 {:else}
 	<div class="w-full h-28 mx-2 flex">

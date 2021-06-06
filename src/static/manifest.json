@@ -2,6 +2,28 @@
     "theme_color" : "#5D38E0",
     "background_color" : "#5D38E0",
     "display" : "standalone",
+    "icons": [
+        {
+            "src": "/icons/120.png",
+            "type": "image/png",
+            "sizes": "120x120"
+        },
+        {
+            "src": "/icons/180.png",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+          "src": "/icons/192.png",
+          "type": "image/png",
+          "sizes": "192x192"
+        },
+        {
+          "src": "/icons/512.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+      ],
     "scope" : "/",
     "start_url" : "/",
     "name" : "E-Receipt",

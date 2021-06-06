@@ -89,17 +89,19 @@ async function expandData(data) {
         totalQty += item.qty;
         totalAmt += item.price * item.qty;
     }
-    const res = await fetch(`https://e-receipter.github.io/shop-data/${data.shopId}.json`);
-    if (res.ok) {
-        const shopData = await res.json();
-        return {
-            ...data,
-            totalAmt,
-            totalQty,
-            shopName: shopData.name,
-            shopData,
+    try {
+        const res = await fetch(`https://e-receipter.github.io/shop-data/${data.shopId}.json`);
+        if (res.ok) {
+            const shopData = await res.json();
+            return {
+                ...data,
+                totalAmt,
+                totalQty,
+                shopName: shopData.name,
+                shopData,
+            }
         }
-    } else {
+    } catch (e) {
         return {
             ...data,
             totalAmt,

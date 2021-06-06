@@ -8,7 +8,7 @@
 </script>
 
 <div on:click={gotoBill} class="cursor-pointer w-full flex justify-between mt-1 py-4 border-b">
-	<div class="text-left mr-4">
+	<div class="text-left mr-4" style="flex:1;">
 		<img
 			alt="<logo>"
 			class="float-left mr-4 h-16 rounded-lg"

@@ -19,7 +19,9 @@ import {
 } from '$service-worker';
 import {
   WASM_MODULE_JS,
-  WASM_MODULE
+  WASM_MODULE,
+  PROTOBUFJS,
+  PROTOFILE,
 } from './settings.js';
 import {
   importWASM,
@@ -39,6 +41,26 @@ importWASM(self.importScripts);
 //precache
 precacheAndRoute([
   {
+    url: '/',
+    revision: timestamp,
+  },
+  {
+    url: '/favicon.ico',
+    revision: timestamp,
+  },
+  {
+    url: '/manifest.json',
+    revision: timestamp,
+  },
+  {
+    url: PROTOFILE,
+    revision: timestamp,
+  },
+  {
+    url: PROTOBUFJS,
+    revision: timestamp,
+  },
+  {
     url: WASM_MODULE_JS,
     revision: timestamp,
   },
@@ -48,48 +70,48 @@ precacheAndRoute([
   }
 ]);
 
-// // Cache Google Fonts with a stale-while-revalidate strategy, with
-// // a maximum number of entries.
-// registerRoute(
-//   ({
-//     url
-//   }) => url.origin === 'https://fonts.googleapis.com' ||
-//   url.origin === 'https://fonts.gstatic.com',
-//   new StaleWhileRevalidate({
-//     cacheName: 'google-fonts',
-//     plugins: [
-//       new ExpirationPlugin({
-//         maxEntries: 20
-//       }),
-//     ],
-//   }),
-// );
-// // css and js
-// registerRoute(
-//   ({
-//     request
-//   }) => request.destination === 'script' ||
-//   request.destination === 'style',
-//   new StaleWhileRevalidate()
-// );
-// // images
-// registerRoute(
-//   ({
-//     request
-//   }) => request.destination === 'image',
-//   new CacheFirst({
-//     cacheName: 'images',
-//     plugins: [
-//       new CacheableResponsePlugin({
-//         statuses: [0, 200],
-//       }),
-//       new ExpirationPlugin({
-//         maxEntries: 60,
-//         maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-//       }),
-//     ],
-//   }),
-// );
+// Cache Google Fonts with a stale-while-revalidate strategy, with
+// a maximum number of entries.
+registerRoute(
+  ({
+    url
+  }) => url.origin === 'https://fonts.googleapis.com' ||
+  url.origin === 'https://fonts.gstatic.com',
+  new StaleWhileRevalidate({
+    cacheName: 'google-fonts',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 20
+      }),
+    ],
+  }),
+);
+// css and js
+registerRoute(
+  ({
+    request
+  }) => request.destination === 'script' ||
+  request.destination === 'style',
+  new StaleWhileRevalidate()
+);
+// images
+registerRoute(
+  ({
+    request
+  }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  }),
+);
 
 //upload image
 registerRoute(

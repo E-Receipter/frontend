@@ -10,11 +10,11 @@
 	let bill = null;
 	let backPage = false;
 
-	async function loadBill(id){
+	async function loadBill(id) {
 		const res = await fetch(`/db/get?id=${id}`);
 		if (res.ok) {
 			bill = await res.json();
-			if((!bill.shopName)&&(navigator.onLine)){
+			if (!bill.shopName && navigator.onLine) {
 				fixBill(id);
 			}
 		} else {
@@ -22,7 +22,7 @@
 		}
 	}
 
-	async function fixBill(id){
+	async function fixBill(id) {
 		const res = await fetch(`/db/fix?id=${id}`);
 		if (res.ok) {
 			bill = await res.json();
@@ -49,9 +49,9 @@
 		if (deleteReturn) {
 			const res = await fetch(`/db/get?id=${bill.id}`, { method: 'DELETE' });
 			if (res.ok) {
-				if(backPage){
+				if (backPage) {
 					window.history.back();
-				}else{
+				} else {
 					goto('/');
 				}
 			}
@@ -64,12 +64,12 @@
 
 	let verifyPopUp = false;
 	let verifyResolve = null;
-	async function verifyBill(){
-		const verifyPromise = new Promise(resolve =>{
+	async function verifyBill() {
+		const verifyPromise = new Promise(resolve => {
 			verifyResolve = resolve;
 		});
 		verifyPopUp = true;
-		const verifyReturn  = await verifyPromise;
+		const verifyReturn = await verifyPromise;
 		verifyPopUp = false;
 	}
 </script>
@@ -89,6 +89,12 @@
 	class="flex flex-col m-2">
 	<div class="flex flex-col font-light">
 		<ShopCard {bill} />
+		{#if bill}
+			<div class="flex justify-between border-black border-t border-b border-dashed py-2">
+				<span>Date: {new Date(bill.datetime).toDateString()}</span>
+				<span>Time: {new Date(bill.datetime).toLocaleTimeString()}</span>
+			</div>
+		{/if}
 	</div>
 	<div class="">
 		<div class="mx-2">
@@ -116,7 +122,7 @@
 						<b>{bill.totalQty}</b>
 					</td>
 					<td class="text-green-500">
-						<b> ₹ {bill.totalAmt.toFixed(2)}</b>
+						<b>₹ {bill.totalAmt.toFixed(2)}</b>
 					</td>
 				</tr>
 			{:else}
@@ -139,5 +145,5 @@
 		on:click={e => deleteResolve(e.detail)} />
 {/if}
 {#if verifyPopUp}
-	<VerifyBottomPop id={bill.id} on:click={e => verifyResolve(e.detail)}/>
+	<VerifyBottomPop id={bill.id} on:click={e => verifyResolve(e.detail)} />
 {/if}
